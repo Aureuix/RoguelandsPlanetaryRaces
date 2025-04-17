@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using UnityEngine;
 
 namespace PlanetaryRaces
 {
@@ -55,10 +57,57 @@ namespace PlanetaryRaces
              Secret = new CharacterRaceInfo("Slug Man", "Shhhh..... You didnt see this...", "Do Something Special...", new EquipStats(1, 1, 1, 1, 1, 1), GadgetCoreAPI.LoadTexture2D("items/TemplateCard"), GadgetCoreAPI.LoadTexture2D("items/TemplateCard"), GadgetCoreAPI.LoadTexture2D("items/TemplateCard"), GadgetCoreAPI.LoadTexture2D("items/TemplateCard")).Register("SecretRace");
 
             Shaper = new CharacterRaceInfo("World Shaper", "In the beginning of the universe, the world shapers created the planets and stars with their bare hands.", "Shape a world.", new EquipStats(1, 7, 1, 1, 1, 1), GadgetCoreAPI.LoadTexture2D("preview/preview_za_hando"), GadgetCoreAPI.LoadTexture2D("races/hand_race_v0"), GadgetCoreAPI.LoadTexture2D("races/hand_race_v1"), GadgetCoreAPI.LoadTexture2D("races/hand_race_v2")).Register("HandRace");
-            Pasta = new CharacterRaceInfo("Spaghettificated", "Back before widespread space colonisation, ships would often fall into unseen black holes.\nThose who fell in were presumed dead, but in reality, their fate was much worse", "Sacrifice everything.", new EquipStats(1, 1, 7, 1, 1, 1), GadgetCoreAPI.LoadTexture2D("preview/preview_pasta"), GadgetCoreAPI.LoadTexture2D("races/pasta_race_v0"), GadgetCoreAPI.LoadTexture2D("races/pasta_race_v1"), GadgetCoreAPI.LoadTexture2D("races/pasta_race_v2")).Register("PastaRace"); 
-            Star = new CharacterRaceInfo("Starborn", "Formed when a star dies, the Starborn have made a name for themselves across the galaxy with their powerful magics.", "", new EquipStats(1, 1, 1, 1, 7, 1), GadgetCoreAPI.LoadTexture2D("preview/preview_stardust_crusader"), GadgetCoreAPI.LoadTexture2D("races/star_dust_race_v0"), GadgetCoreAPI.LoadTexture2D("races/star_dust_race_v1"), GadgetCoreAPI.LoadTexture2D("races/star_dust_race_v2")).Register("STarRace"); 
+            Pasta = new CharacterRaceInfo("Spaghettificated", "Back before widespread space colonisation, ships would often fall into unseen black holes.\nThose who fell in were presumed dead, but in reality, their fate was much worse", "Sacrifice everything.", new EquipStats(1, 1, 7, 1, 1, 1), GadgetCoreAPI.LoadTexture2D("preview/preview_pasta"), GadgetCoreAPI.LoadTexture2D("races/pasta_race_v0"), GadgetCoreAPI.LoadTexture2D("races/pasta_race_v1"), GadgetCoreAPI.LoadTexture2D("races/pasta_race_v2")).Register("PastaRace");
+            Pasta.SetUnlockChecker(() =>
+            {
+                if (InstanceTracker.GameScript.GetPlayerLevel() >= 200 && Menuu.curProfession == 1 && IsLegendary()) {
+                    return true;
+                    
+                }
+                return false;
+            });
+            Star = new CharacterRaceInfo("Starborn", "Formed when a star dies, the Starborn have made a name for themselves across the galaxy with their powerful magics.", StarDesc(), new EquipStats(1, 1, 1, 1, 7, 1), GadgetCoreAPI.LoadTexture2D("preview/preview_stardust_crusader"), GadgetCoreAPI.LoadTexture2D("races/star_dust_race_v0"), GadgetCoreAPI.LoadTexture2D("races/star_dust_race_v1"), GadgetCoreAPI.LoadTexture2D("races/star_dust_race_v2")).Register("STarRace");
+            Star.SetUnlockChecker(() =>
+            {
+                if (InstanceTracker.GameScript.GetFinalStat(0) == 518 && InstanceTracker.GameScript.GetFinalStat(1) == 141 && InstanceTracker.GameScript.GetFinalStat(2) == 104 && InstanceTracker.GameScript.GetFinalStat(3) == 151 && InstanceTracker.GameScript.GetFinalStat(4) == 444 && InstanceTracker.GameScript.GetFinalStat(5) == 255){
+                    return true;
+                }return false;
+            });
             Void = new CharacterRaceInfo("Void Drinker", "On a distant world, a sea of void spans an almost infinite distance.\nThose who bathe in it are said to move to a higher existence.", "Seek the void.", new EquipStats(1, 1, 1, 1, 1, 7), GadgetCoreAPI.LoadTexture2D("preview/preview_fluid"), GadgetCoreAPI.LoadTexture2D("races/void_fluid_race_v0"), GadgetCoreAPI.LoadTexture2D("races/void_fluid_race_v1"), GadgetCoreAPI.LoadTexture2D("races/void_fluid_race_v2")).Register("VoidRace");
 
+        }
+        private static FieldInfo inventory = typeof(GameScript).GetField("inventory", BindingFlags.Instance | BindingFlags.NonPublic);
+        public static bool IsLegendary() {
+            Item[] array = (Item[])inventory.GetValue(InstanceTracker.GameScript);
+            if (array[36].tier == 3 && array[37].tier == 3 && array[38].tier == 3 && array[39].tier == 3 && array[40].tier == 3 && array[41].tier == 3) {
+                return true;
+            }
+            return false;
+        }
+        public static string StarDesc() {
+            
+            DateTime dt = DateTime.Now;
+            switch ((int)dt.DayOfWeek) 
+            {
+                case 0:
+                    return ("Immerse yourself in multitudes.");
+                case 1:
+                    return ("Meow loudly.");
+                case 2:
+                    return ("WYVRN 77 WHITEMAG 09 PRISM 88");
+                case 3:
+                    return ("Become a Legend of the Cobalt Citadel.");
+                case 4:
+                    return ("kawaii wo naru");
+                case 5:
+                    return ("Hold the sun in the palm of your hand.");
+                case 6:
+                    return ("Wield Sean's mistake as a powerful Ironclad.");
+                       
+
+
+            }
+            return ("If you see this something must have gone majorly wrong! oops!");
         }
     }
 }
