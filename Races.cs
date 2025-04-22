@@ -98,7 +98,7 @@ namespace PlanetaryRaces
                 case 3:
                     return ("Become a Legend of the Cobalt Citadel.");
                 case 4:
-                    return ("kawaii wo naru");
+                    return ("Datamine me! かわいいを成る");
                 case 5:
                     return ("Hold the sun in the palm of your hand.");
                 case 6:
